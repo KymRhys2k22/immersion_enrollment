@@ -58,7 +58,7 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
     toPng(cardRef.current, { cacheBust: true })
       .then((dataUrl) => {
         const link = document.createElement("a");
-        link.download = `immersion-track-${selectedTrack?.id || "card"}.png`;
+        link.download = `immersion-track-${selectedTrack?.id || "card"}${new Date().toISOString()}${enrollment.profile.studentNumber}.png`;
         link.href = dataUrl;
         link.click();
       })
@@ -135,27 +135,19 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
                   },
                   {
                     label: "Enrollment Date",
-                    value: enrollment.profile.enrolledAt
-                      ? new Date(
-                          enrollment.profile.enrolledAt,
-                        ).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : "Not set",
+                    value: new Date().toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }),
                   },
                   {
                     label: "Enrollment Time",
-                    value: enrollment.profile.enrolledAt
-                      ? new Date(
-                          enrollment.profile.enrolledAt,
-                        ).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })
-                      : "Not set",
+                    value: new Date().toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    }),
                   },
                 ].map((item, idx, arr) => (
                   <React.Fragment key={item.label}>
@@ -180,15 +172,17 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
                 <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                   Chosen Immersion Track
                 </h2>
-                <span className="text-xs text-red-500 animate-bounce italic flex items-center gap-1">
-                  <Download className="w-3 h-3" /> Click card to save
-                </span>
+                <button
+                  onClick={handleDownloadCard}
+                  className="cursor-pointer text-xs bg-primary/10 text-primary font-semibold flex items-center gap-1 rounded-full px-2 py-1 hover:bg-primary/20 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg transition-all duration-200">
+                  <Download className="w-8 h-8 bg-primary text-white rounded-full p-1" />{" "}
+                  <span className=" md:block">Download Card</span>
+                </button>
               </div>
               {selectedTrack && (
                 <div
                   ref={cardRef}
-                  onClick={handleDownloadCard}
-                  className="bg-cover bg-center rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden text-white h-full min-h-[200px] flex flex-col justify-between cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group border-primary ring-4 ring-primary/5"
+                  className="bg-cover bg-center rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden text-white h-full min-h-[200px] flex flex-col justify-between  hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group border-primary ring-4 ring-primary/5"
                   style={{ backgroundImage: "url(/bg_card.webp)" }}>
                   <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/80 group-hover:bg-white/80 dark:group-hover:bg-slate-900/90 transition-colors backdrop-blur-[2px]" />
                   <div className="flex items-start gap-4 relative z-10">
@@ -208,6 +202,14 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
                         </p>
                         <p className="text-xs text-slate-900 dark:text-white/80 font-medium">
                           {enrollment.profile.fullName}
+                        </p>
+
+                        <p className="text-xs text-slate-900 dark:text-white/80 font-medium">
+                          {new Date().toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
                         </p>
                       </div>
                     </div>
