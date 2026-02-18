@@ -118,7 +118,7 @@ const TrackSelectionPage = ({ enrollment, setTrack }) => {
                       <div className="flex items-center gap-2 shrink-0">
                         {!isLoading && (
                           <div
-                            className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${
+                            className={`hidden flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${
                               isFull
                                 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                                 : enrollmentCount >= 30

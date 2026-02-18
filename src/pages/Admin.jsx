@@ -16,6 +16,7 @@ import {
   getAllEnrollments,
   deleteEnrollment,
 } from "../services/supabase";
+import { TRACKS } from "../constants";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import {
@@ -28,11 +29,14 @@ import {
   FileSpreadsheet,
   Download,
   Trash2,
+  Users2,
 } from "lucide-react";
 
 // Admin credentials from .env
 const ADMIN_USER = import.meta.env.VITE_ADMIN_USERNAME;
 const ADMIN_PASS = import.meta.env.VITE_ADMIN_PASSWORD;
+
+const MAX_CAPACITY = 40;
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -104,6 +108,36 @@ const Admin = () => {
       fetchData();
     }
   }, [isAuthenticated]);
+
+  // Calculate Track Stats
+  const trackStats = useMemo(() => {
+    const stats = TRACKS.map((track) => {
+      const count = students.filter(
+        (s) => s.immersion_program === track.id,
+      ).length;
+      return {
+        ...track,
+        count,
+        percent: (count / MAX_CAPACITY) * 100,
+      };
+    });
+    return stats;
+  }, [students]);
+
+  // Helper for capacity colors
+  const getCapacityColor = (count) => {
+    if (count >= 36)
+      return "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-900/50";
+    if (count >= 21)
+      return "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-900/50";
+    return "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-900/50";
+  };
+
+  const getProgressColor = (count) => {
+    if (count >= 36) return "bg-red-500";
+    if (count >= 21) return "bg-amber-500";
+    return "bg-emerald-500";
+  };
 
   // Handle Excel Export
   const handleExportExcel = () => {
@@ -263,6 +297,50 @@ const Admin = () => {
           Log Out
         </button>
       </header>
+
+      {/* Track Capacity Tracker Section */}
+      <div className="px-6 py-4 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 shrink-0">
+        <div className="flex items-center gap-2 mb-4">
+          <Users2 className="w-4 h-4 text-primary" />
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            Track Capacity Tracker (Max 40)
+          </h2>
+        </div>
+
+        <div className="flex gap-4 overflow-x-auto pb-2 custom-scrollbar">
+          {trackStats.map((track) => (
+            <div
+              key={track.id}
+              className={`min-w-[200px] p-3 rounded-2xl border transition-all hover:shadow-md ${getCapacityColor(track.count)}`}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <track.icon className="w-4 h-4 opacity-70" />
+                  <span className="text-[10px] font-bold uppercase truncate max-w-[120px]">
+                    {track.title}
+                  </span>
+                </div>
+                <span className="text-xs font-black">{track.count}</span>
+              </div>
+
+              <div className="h-1.5 w-full bg-black/5 dark:bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-1000 ${getProgressColor(track.count)}`}
+                  style={{ width: `${Math.min(track.percent, 100)}%` }}
+                />
+              </div>
+
+              <div className="flex justify-between items-center mt-1.5">
+                <span className="text-[9px] font-medium opacity-60">
+                  {MAX_CAPACITY - track.count} slots left
+                </span>
+                <span className="text-[9px] font-bold">
+                  {Math.round(track.percent)}%
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Control Bar */}
       <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-md px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-4 shrink-0">

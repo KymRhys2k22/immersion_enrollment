@@ -11,8 +11,16 @@ import { toPng } from "html-to-image";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { TRACKS } from "../constants";
-import { submitEnrollment } from "../services/supabase"; // Service to handle data submission
-import { ChevronLeft, Edit2, Star, Check, Send, Download } from "lucide-react";
+import { submitEnrollment, checkEnrollmentStatus } from "../services/supabase"; // Service to handle data submission
+import {
+  ChevronLeft,
+  Edit2,
+  Star,
+  Check,
+  Send,
+  Download,
+  AlertCircle,
+} from "lucide-react";
 
 /**
  * ReviewPage Component
@@ -24,18 +32,37 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true);
+
   const selectedTrack = TRACKS.find((t) => t.id === enrollment.selectedTrackId);
   const cardRef = useRef(null);
 
-  // Set enrollment timestamp when page loads (if not already set)
+  // Set enrollment timestamp and check duplicate status when page loads
   useEffect(() => {
     if (!enrollment.profile.enrolledAt) {
       updateProfile({ enrolledAt: new Date().toISOString() });
     }
+
+    const verifyStatus = async () => {
+      setIsCheckingStatus(true);
+      try {
+        const isEnrolled = await checkEnrollmentStatus(
+          enrollment.profile.studentNumber,
+        );
+        setAlreadyEnrolled(isEnrolled);
+      } catch (error) {
+        console.error("Error verifying enrollment status:", error);
+      } finally {
+        setIsCheckingStatus(false);
+      }
+    };
+
+    verifyStatus();
   }, []);
 
   const handleSubmit = async () => {
-    if (!isVerified) return;
+    if (!isVerified || alreadyEnrolled) return;
 
     setIsSubmitting(true);
     try {
@@ -99,7 +126,7 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
         </div>
       </div>
 
-      <main className="flex-1 px-6 pb-40 pt-36 md:pb-10 overflow-y-auto custom-scrollbar">
+      <main className="flex-1 px-6 pb-44 pt-36 md:pb-10 overflow-y-auto custom-scrollbar">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <section>
@@ -253,16 +280,50 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
               coordinator.
             </p>
           </div>
+
+          {alreadyEnrolled && (
+            <div className="max-w-2xl mx-auto mt-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-2xl p-4 flex gap-4 items-start animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-xl">
+                <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-red-900 dark:text-red-400">
+                  Application Already Exists
+                </h3>
+                <p className="text-xs text-red-700 dark:text-red-500/80 leading-relaxed mt-1">
+                  Our records show that student number{" "}
+                  <strong>{enrollment.profile.studentNumber}</strong> is already
+                  enrolled in an immersion track. Duplicate submissions are not
+                  allowed.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
       <footer className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-900/80 backdrop-blur-lg p-6 border-t border-slate-100 dark:border-slate-800 space-y-3 safe-bottom z-50 md:static md:bg-transparent md:border-t-0 md:flex md:flex-row-reverse md:gap-4 md:items-center md:max-w-5xl md:mx-auto md:w-full">
         <button
-          className="w-full md:w-auto md:px-8 bg-primary hover:bg-[#008800] text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
+          className={`w-full md:w-auto md:px-8 font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed ${
+            alreadyEnrolled
+              ? "bg-red-500"
+              : "bg-primary hover:bg-[#008800] shadow-primary/30"
+          }`}
           onClick={handleSubmit}
-          disabled={isSubmitting || !isVerified}>
-          {isSubmitting ? "Submitting..." : "Submit Enrollment"}
-          <Send className="w-4 h-4" />
+          disabled={
+            isSubmitting || !isVerified || alreadyEnrolled || isCheckingStatus
+          }>
+          {isCheckingStatus
+            ? "Checking Status..."
+            : isSubmitting
+              ? "Submitting..."
+              : alreadyEnrolled
+                ? "Already Enrolled"
+                : "Submit Enrollment"}
+          {!alreadyEnrolled && !isCheckingStatus && (
+            <Send className="w-4 h-4" />
+          )}
+          {alreadyEnrolled && <AlertCircle className="w-4 h-4" />}
         </button>
         <button
           className="w-full md:w-auto md:px-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold py-3 rounded-xl transition-all"
