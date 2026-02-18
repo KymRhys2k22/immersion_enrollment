@@ -4,8 +4,7 @@
  * Service to handle student verification against the OpenSheet API.
  */
 
-const API_URL =
-  "https://opensheet.elk.sh/1pbv6_9rWC8ldhlZoUkxyB3KY-6nwaNh0HLFzncsvCBI/students";
+const API_URL = import.meta.env.VITE_API_URL;
 
 let studentsCache = null;
 

@@ -254,7 +254,7 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
           {isAlreadyEnrolled && (
             <div
               ref={popupRef}
-              className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-5 rounded-xl border-2 border-green-500 flex gap-4 items-start shadow-lg">
+              className="bg-linear-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-5 rounded-xl border-2 border-green-500 flex gap-4 items-start shadow-lg">
               <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shrink-0">
                 <CheckCircle2 className="text-white w-7 h-7" />
               </div>
@@ -274,7 +274,7 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
             <Info className="text-accent w-5 h-5 shrink-0" />
             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
               Please ensure the auto-filled details are correct. If there is a
-              mismatch, please contact the Registrar's Office.
+              mismatch, please contact sir Mckhy.
             </p>
           </div>
         </form>

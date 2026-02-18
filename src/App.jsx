@@ -87,7 +87,7 @@ const App = () => {
   return (
     <HashRouter>
       <div className="flex justify-center min-h-screen bg-background-light dark:bg-background-dark md:py-8 md:px-4 transition-all duration-300">
-        <div className="w-full md:max-w-4xl lg:max-w-6xl bg-white dark:bg-slate-900 min-h-screen md:min-h-[800px] md:h-auto flex flex-col relative shadow-2xl md:rounded-[2rem] overflow-hidden border-slate-100 dark:border-slate-800 md:border">
+        <div className="w-full md:max-w-4xl lg:max-w-6xl bg-white dark:bg-slate-900 min-h-screen md:min-h-[800px] md:h-auto flex flex-col relative shadow-2xl md:rounded-4xl overflow-hidden border-slate-100 dark:border-slate-800 md:border">
           {/* Top Decorative Border */}
           <div className="h-1.5 w-full bg-accent shrink-0"></div>
 

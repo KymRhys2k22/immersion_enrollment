@@ -5,8 +5,6 @@ import {
   FileText,
   Download,
   Info,
-  LayoutDashboard,
-  GraduationCap,
   Calendar,
   Building,
   UserCheck,
@@ -14,16 +12,13 @@ import {
 import generatePDF from "react-to-pdf";
 import { TRACKS } from "../constants";
 
-/**
- * SuccessPage Component
- *
- * @param {Object} props
- * @param {Object} props.enrollment - The global enrollment state containing student profile and selected track.
- */
 const SuccessPage = ({ enrollment }) => {
   const navigate = useNavigate();
-  const targetRef = React.useRef();
 
+  // PDF target ref
+  const targetRef = React.useRef(null);
+
+  // Download PDF function
   const downloadPDF = async () => {
     if (!targetRef.current) {
       console.error("PDF target element not found");
@@ -50,62 +45,78 @@ const SuccessPage = ({ enrollment }) => {
     });
   };
 
-  // Find the details of the selected track
+  // Find selected track
   const selectedTrack = TRACKS.find(
-    (t) => t.id === enrollment.selectedTrackId,
-  ) || { title: "Unspecified Track", hours: 0 };
+    (t) => t.id === enrollment?.selectedTrackId,
+  ) || {
+    title: "Unspecified Track",
+    hours: 0,
+  };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 relative overflow-hidden">
-      <main className="flex-1 flex flex-col items-center justify-center text-center w-full z-10  md:py-20">
-        <div className="relative mb-8 md:mb-12">
-          <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse"></div>
-          <div className="w-24 h-24 md:w-32 md:h-32 bg-primary text-white rounded-full flex items-center justify-center relative z-10 shadow-2xl shadow-primary/40">
-            <Check className="w-12 h-12 md:w-16 md:h-16 stroke-3" />
+    <div className="flex-1 flex flex-col items-center justify-center px-6 relative overflow-hidden bg-slate-50 min-h-screen">
+      {/* MAIN VISIBLE CONTENT */}
+      <main className="flex-1 flex flex-col items-center justify-center text-center w-full z-10 py-12">
+        <div className="relative mb-8">
+          <div className="absolute inset-0 bg-green-500/20 rounded-full blur-2xl animate-pulse"></div>
+          <div className="w-24 h-24 bg-green-600 text-white rounded-full flex items-center justify-center relative z-10 shadow-xl">
+            <Check className="w-12 h-12 stroke-[3px]" />
           </div>
-          <div className="absolute -top-2 -right-2 w-4 h-4 bg-accent rounded-full animate-bounce"></div>
-          <div className="absolute bottom-2 -left-3 w-3 h-3 bg-accent rounded-full animate-bounce delay-150"></div>
         </div>
 
-        <h1 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 text-slate-900 dark:text-white">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4 text-slate-900">
           Enrollment Successful!
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs md:max-w-md mx-auto mb-10 md:mb-14 text-sm md:text-base">
-          Thank you for enrolling in your work immersion. A confirmation email
-          with your details has been sent to your inbox.
+
+        <p className="text-slate-500 max-w-md mb-10">
+          Your immersion enrollment confirmation is ready for download.
         </p>
 
-        <div className="w-full max-w-md bg-white dark:bg-slate-800/50 rounded-2xl p-6 md:p-8 border border-slate-100 dark:border-slate-800 shadow-sm mb-8 md:mb-12">
+        {/* Download Card */}
+        <div className="w-full max-w-md bg-white rounded-2xl p-6 shadow-md border border-slate-100 mb-8">
           <div className="flex items-center gap-4 mb-6 text-left">
-            <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-lg flex items-center justify-center shrink-0">
-              <FileText className="w-6 h-6" />
+            <div className="p-3 bg-red-50 rounded-lg">
+              <FileText className="w-6 h-6 text-red-500" />
             </div>
-            <div className="min-w-0">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <div>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Summary Report
               </p>
-              <p className="text-sm font-semibold truncate">
-                Immersion_Enrollment_Confirmation.pdf
+              <p className="text-sm font-semibold text-slate-700">
+                Immersion_Confirmation.pdf
               </p>
             </div>
           </div>
+
           <button
             onClick={downloadPDF}
-            className="w-full bg-accent dark:bg-primary text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-95 shadow-lg group">
-            <Download className="w-5 h-5 group-hover:animate-bounce" />
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95 shadow-lg shadow-green-200">
+            <Download className="w-5 h-5" />
             Download Confirmation PDF
           </button>
         </div>
 
-        <div className="flex items-center gap-2 text-accent">
+        <div className="flex items-center gap-2 text-slate-500 text-sm">
           <Info className="w-4 h-4" />
-          <span className="text-xs font-medium uppercase tracking-wide">
-            Keep a copy for your records
-          </span>
+          Keep a copy for your school records
         </div>
       </main>
 
-      {/* Hidden PDF content for react-to-pdf */}
+      {/* FOOTER NAVIGATION */}
+      <footer className="w-full max-w-md pb-12">
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="w-full bg-slate-900 text-white py-3 rounded-xl mb-3 font-medium">
+          Go to Dashboard
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="w-full bg-white border border-slate-200 text-slate-600 py-3 rounded-xl font-medium hover:bg-slate-50">
+          Back to Home
+        </button>
+      </footer>
+
+      {/* ================= PDF TEMPLATE (HIDDEN FROM VIEW) ================= */}
       <div
         style={{
           position: "absolute",
@@ -237,32 +248,18 @@ const SuccessPage = ({ enrollment }) => {
               color: "#94a3b8",
             }}>
             <p style={{ margin: "0 0 3px 0" }}>
+              Document ID: ENR-
+              {Math.random().toString(36).substr(2, 9).toUpperCase()}
+            </p>
+            <p style={{ margin: "0 0 3px 0" }}>
               Generated on: {new Date().toLocaleString()}
             </p>
             <p style={{ margin: 0 }}>
-              This is not official document for school records.
+              This is an official document for school records.
             </p>
           </div>
         </div>
       </div>
-
-      <footer className="w-full  space-y-3 safe-bottom z-10 md:flex md:gap-4 md:space-y-0 md:justify-center md:max-w-2xl">
-        <button
-          className="w-full mb-4 md:w-auto md:px-12 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 active:scale-95"
-          onClick={() => navigate("/step/1")}>
-          Go to Dashboard
-          <LayoutDashboard className="w-4 h-4" />
-        </button>
-        <button
-          className="w-full md:w-auto md:px-12 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold py-3 rounded-xl transition-all"
-          onClick={() => navigate("/step/1")}>
-          Back to Home
-        </button>
-      </footer>
-
-      {/* Decorative Blobs */}
-      <div className="absolute top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full z-0"></div>
-      <div className="absolute bottom-40 -left-20 w-48 h-48 bg-accent/5 rounded-full z-0"></div>
     </div>
   );
 };
