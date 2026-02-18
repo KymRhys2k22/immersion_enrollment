@@ -84,3 +84,26 @@ export const getTrackEnrollmentCounts = async () => {
     return {};
   }
 };
+
+/**
+ * Fetches all student enrollment records from the database.
+ * @returns {Promise<Array>} List of enrollment objects.
+ */
+export const getAllEnrollments = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("en_student")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching all enrollments:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getAllEnrollments:", error);
+    throw error;
+  }
+};

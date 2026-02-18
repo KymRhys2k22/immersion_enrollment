@@ -31,6 +31,7 @@ import CredentialsPage from "./pages/CredentialsPage"; // Step 1: Verify student
 import TrackSelectionPage from "./pages/TrackSelectionPage"; // Step 2: Choose an immersion track
 import ReviewPage from "./pages/ReviewPage"; // Step 3: Review summary
 import SuccessPage from "./pages/SuccessPage"; // Step 4: Success confirmation
+import Admin from "./pages/Admin"; // Admin Dashboard
 
 /**
  * App Component
@@ -124,6 +125,7 @@ const App = () => {
               path="/success"
               element={<SuccessPage enrollment={enrollment} />}
             />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </div>
       </div>
