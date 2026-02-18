@@ -107,3 +107,22 @@ export const getAllEnrollments = async () => {
     throw error;
   }
 };
+/**
+ * Deletes a student enrollment record from the database.
+ * @param {string|number} id - The unique ID of the record to delete.
+ */
+export const deleteEnrollment = async (id) => {
+  try {
+    const { error } = await supabase.from("en_student").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting enrollment:", error);
+      throw error;
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error in deleteEnrollment:", error);
+    throw error;
+  }
+};

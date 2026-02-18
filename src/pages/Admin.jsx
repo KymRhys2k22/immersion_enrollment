@@ -11,7 +11,11 @@
  */
 
 import React, { useState, useEffect, useMemo } from "react";
-import { supabase, getAllEnrollments } from "../services/supabase";
+import {
+  supabase,
+  getAllEnrollments,
+  deleteEnrollment,
+} from "../services/supabase";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import {
@@ -23,6 +27,7 @@ import {
   RefreshCcw,
   FileSpreadsheet,
   Download,
+  Trash2,
 } from "lucide-react";
 
 // Admin credentials from .env
@@ -54,6 +59,23 @@ const Admin = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("admin_auth");
+  };
+
+  // Handle Delete
+  const handleDelete = async (id, name) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete ${name}? This action cannot be undone.`,
+      )
+    ) {
+      try {
+        await deleteEnrollment(id);
+        // Optimistic UI update or just refetch
+        setStudents(students.filter((s) => s.id !== id));
+      } catch (err) {
+        alert("Failed to delete record. Please try again.");
+      }
+    }
   };
 
   // Persistence for auth
@@ -296,12 +318,15 @@ const Admin = () => {
                   <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                     Submission Date
                   </th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
                 {loading && students.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-20 text-center">
+                    <td colSpan="6" className="px-6 py-20 text-center">
                       <div className="flex flex-col items-center gap-3">
                         <RefreshCcw className="w-8 h-8 text-primary animate-spin" />
                         <p className="text-slate-400 font-medium">
@@ -312,7 +337,7 @@ const Admin = () => {
                   </tr>
                 ) : filteredStudents.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-20 text-center">
+                    <td colSpan="6" className="px-6 py-20 text-center">
                       <div className="flex flex-col items-center gap-2">
                         <p className="text-slate-500 font-bold text-xl uppercase tracking-widest opacity-20 italic">
                           No Students Found
@@ -372,6 +397,14 @@ const Admin = () => {
                               )
                             : ""}
                         </p>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          onClick={() => handleDelete(student.id, student.name)}
+                          className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-all"
+                          title="Delete Record">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
                   ))
