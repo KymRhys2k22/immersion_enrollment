@@ -12,6 +12,8 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { supabase, getAllEnrollments } from "../services/supabase";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import {
   Search,
   LogOut,
@@ -20,6 +22,7 @@ import {
   ShieldCheck,
   RefreshCcw,
   FileSpreadsheet,
+  Download,
 } from "lucide-react";
 
 // Admin credentials from .env
@@ -79,6 +82,59 @@ const Admin = () => {
       fetchData();
     }
   }, [isAuthenticated]);
+
+  // Handle Excel Export
+  const handleExportExcel = () => {
+    if (students.length === 0) return;
+
+    // Prepare data for Excel
+    const exportData = students.map((s) => ({
+      "Student Number": s.student_number || "",
+      "Full Name": s.name || "",
+      Email: s.email || "",
+      "Academic Section": s.section || "",
+      "Immersion Program":
+        s.immersion_program?.replace("-", " ").toUpperCase() || "",
+      "Enrollment Date": s.created_at
+        ? new Date(s.created_at).toLocaleDateString()
+        : "",
+      "Enrollment Time": s.created_at
+        ? new Date(s.created_at).toLocaleTimeString()
+        : "",
+    }));
+
+    // Create Worksheet
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Set Column Widths
+    const wscols = [
+      { wch: 15 }, // Student Number
+      { wch: 30 }, // Full Name
+      { wch: 30 }, // Email
+      { wch: 20 }, // Academic Section
+      { wch: 25 }, // Immersion Program
+      { wch: 15 }, // Enrollment Date
+      { wch: 15 }, // Enrollment Time
+    ];
+    worksheet["!cols"] = wscols;
+
+    // Create Workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Enrollments");
+
+    // Generate buffer
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    // Save file
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+    const fileName = `enrollments_${new Date().toISOString().split("T")[0]}.xlsx`;
+    saveAs(data, fileName);
+  };
 
   // Filtered Data
   const filteredStudents = useMemo(() => {
@@ -198,13 +254,24 @@ const Admin = () => {
             placeholder="Search by student number, name, or track..."
           />
         </div>
-        <button
-          onClick={fetchData}
-          disabled={loading}
-          className="flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 py-2 px-6 rounded-xl font-bold text-sm transition-all disabled:opacity-50">
-          <RefreshCcw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleExportExcel}
+            disabled={loading || students.length === 0}
+            className="flex items-center justify-center gap-2 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50 text-green-700 dark:text-green-400 py-2 px-6 rounded-xl font-bold text-sm transition-all disabled:opacity-50">
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Export Excel</span>
+          </button>
+          <button
+            onClick={fetchData}
+            disabled={loading}
+            className="flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 py-2 px-6 rounded-xl font-bold text-sm transition-all disabled:opacity-50">
+            <RefreshCcw
+              className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </button>
+        </div>
       </div>
 
       {/* Table Container */}
