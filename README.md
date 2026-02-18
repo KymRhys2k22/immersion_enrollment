@@ -2,12 +2,6 @@
 
 A modern, responsive web application designed to streamline student enrollment for immersion tracks. Built with a focus on user experience, real-time feedback, and professional documentation generation.
 
-<div align="center">
-  <img width="800" alt="App Preview" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-## 🚀 Features
-
 - **Multi-Step Enrollment**: A fluid, step-by-step wizard (Credentials → Track Selection → Review → Success).
 - **Track Selection & Capacity Tracking**: Real-time tracking of enrollment slots for various tracks (e.g., AI, Game Design, Psychology, etc.) using Supabase.
 - **Dynamic Capacity Indicators**: Visual badges indicating track availability and disabling tracks once they reach maximum capacity.
@@ -33,31 +27,32 @@ A modern, responsive web application designed to streamline student enrollment f
 
 ### Installation
 
-1.  **Clone the repository**:
+1. **Clone the repository**:
 
-    ```bash
-    git clone [repository-url]
-    cd immersion_enrollment
-    ```
+   ```bash
+   git clone [repository-url]
+   cd immersion_enrollment
+   ```
 
-2.  **Install dependencies**:
+2. **Install dependencies**:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
-3.  **Environment Setup**:
-    Create a `.env` file in the root directory and add your Supabase credentials:
+3. **Environment Setup**:
+   Create a `.env` file in the root directory and add your Supabase credentials:
 
-    ```env
-    VITE_SUPABASE_URL=your_supabase_url
-    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-    ```
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-4.  **Run the development server**:
-    ```bash
-    npm run dev
-    ```
+4. **Run the development server**:
+
+   ```bash
+   npm run dev
+   ```
 
 ---
 
