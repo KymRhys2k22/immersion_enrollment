@@ -222,7 +222,7 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
               {selectedTrack && (
                 <div
                   ref={cardRef}
-                  className="place-self-center bg-cover hover:rotate-2 bg-center rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden text-white h-full max-w-[380px] min-h-[200px] flex flex-col justify-between  hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group border-primary ring-4 ring-primary/5"
+                  className="place-self-center bg-cover hover:rotate-2 bg-center rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden text-white h-full max-w-[400px] min-h-[200px] flex flex-col justify-between  hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group border-primary ring-4 ring-primary/5"
                   style={{ backgroundImage: "url(/bg_card.webp)" }}>
                   <div className="absolute inset-0  dark:bg-slate-900/80   transition-colors " />
                   <div className="flex items-start gap-4 relative z-10">
