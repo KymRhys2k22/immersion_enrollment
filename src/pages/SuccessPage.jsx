@@ -144,7 +144,7 @@ const SuccessPage = ({ enrollment }) => {
               Enrollment Confirmation
             </h1>
             <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
-              Academic Year 2026–2027
+              Academic Year 2025–2026
             </p>
           </div>
 

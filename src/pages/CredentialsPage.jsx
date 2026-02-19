@@ -289,7 +289,7 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
           <ArrowRight className="w-5 h-5" />
         </button>
         <p className="text-[10px] text-center text-slate-400 mt-4 uppercase tracking-[0.2em] font-medium">
-          Academic Year 2026-2027
+          Academic Year 2025-2026
         </p>
       </footer>
     </>

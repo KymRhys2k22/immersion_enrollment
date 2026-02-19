@@ -17,7 +17,7 @@ export const TRACKS = [
     description:
       "Deep dive into machine learning models and future tech automation.",
     icon: Brain,
-    hours: 120,
+    hours: 32,
   },
   {
     id: "game-design",
@@ -25,7 +25,7 @@ export const TRACKS = [
     description:
       "Crafting immersive experiences through mechanics and visual storytelling.",
     icon: Gamepad2,
-    hours: 80,
+    hours: 32,
   },
   {
     id: "psychology",
@@ -33,7 +33,7 @@ export const TRACKS = [
     description:
       "Exploring human behavior, mental health, and social dynamics.",
     icon: Users,
-    hours: 100,
+    hours: 32,
   },
   {
     id: "film-photo",
@@ -41,7 +41,7 @@ export const TRACKS = [
     description:
       "Visual narrative techniques and professional cinematography basics.",
     icon: Camera,
-    hours: 120,
+    hours: 32,
   },
   {
     id: "pneumatics",
@@ -49,14 +49,14 @@ export const TRACKS = [
     description:
       "Industrial automation using compressed air and control systems.",
     icon: Wind,
-    hours: 90,
+    hours: 32,
   },
   {
     id: "data-viz",
     title: "Business Data Visualization",
     description: "Transforming complex data into actionable business insights.",
     icon: BarChart3,
-    hours: 110,
+    hours: 32,
   },
   {
     id: "tourism",
@@ -64,14 +64,14 @@ export const TRACKS = [
     description:
       "Sustainable tourism and cultural management in a global market.",
     icon: Map,
-    hours: 120,
+    hours: 32,
   },
   {
     id: "hydraulics",
     title: "Hydraulics: Water at Works",
     description: "Engineering principles of liquid-based mechanical power.",
     icon: Droplets,
-    hours: 100,
+    hours: 32,
   },
   {
     id: "electrical",
@@ -79,6 +79,6 @@ export const TRACKS = [
     description:
       "Modern circuitry and IoT integration for energy-efficient systems.",
     icon: Lightbulb,
-    hours: 120,
+    hours: 32,
   },
 ];
