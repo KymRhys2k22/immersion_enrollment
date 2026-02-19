@@ -93,7 +93,9 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
       return;
     }
 
-    toPng(cardRef.current, { cacheBust: true })
+    toPng(cardRef.current, {
+      cacheBust: true,
+    })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = `immersion-track-${selectedTrack?.id || "card"}${new Date().toISOString()}${enrollment.profile.studentNumber}.png`;
@@ -212,7 +214,7 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
                 </h2>
                 <button
                   onClick={handleDownloadCard}
-                  className="cursor-pointer text-xs bg-primary/10 text-primary font-semibold flex items-center gap-1 rounded-full px-2 py-1 hover:bg-primary/20 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg transition-all duration-200">
+                  className="cursor-pointer shadow-md text-xs bg-primary/10 text-primary font-semibold flex items-center gap-1 rounded-full px-2 py-1 hover:bg-primary/20 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg transition-all duration-200">
                   <Download className="w-8 h-8 bg-primary text-white rounded-full p-1" />{" "}
                   <span className=" md:block">Download Card</span>
                 </button>
@@ -220,12 +222,12 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
               {selectedTrack && (
                 <div
                   ref={cardRef}
-                  className="bg-cover bg-center rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden text-white h-full min-h-[200px] flex flex-col justify-between  hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group border-primary ring-4 ring-primary/5"
+                  className="place-self-center bg-cover hover:rotate-2 bg-center rounded-2xl p-6 shadow-xl shadow-primary/20 relative overflow-hidden text-white h-full max-w-[380px] min-h-[200px] flex flex-col justify-between  hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group border-primary ring-4 ring-primary/5"
                   style={{ backgroundImage: "url(/bg_card.webp)" }}>
-                  <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/80 group-hover:bg-white/80 dark:group-hover:bg-slate-900/90 transition-colors backdrop-blur-[2px]" />
+                  <div className="absolute inset-0  dark:bg-slate-900/80   transition-colors " />
                   <div className="flex items-start gap-4 relative z-10">
-                    <div className="w-14 h-14 bg-accent/75 rounded-xl flex items-center justify-center shrink-0">
-                      <selectedTrack.icon className="text-black w-8 h-8" />
+                    <div className="w-14 h-14 bg-accent/80 rounded-xl flex items-center justify-center shrink-0">
+                      <selectedTrack.icon className="text-black/80 w-8 h-8" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] text-slate-900 dark:text-white/80 uppercase font-bold tracking-widest mb-1">
@@ -253,7 +255,7 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-slate-900/10 dark:border-white/20 flex items-center justify-between relative z-10">
-                    <div className="flex items-center gap-2">
+                    <div className="flex bg-white/80 text-slate-900 dark:text-white px-2 py-1 rounded-full font-bold items-center gap-2">
                       <Star className="text-accent w-3 h-3 fill-current" />
                       <span className="text-[11px] text-slate-800 dark:text-white/90 font-medium">
                         {selectedTrack.isCertified
@@ -261,7 +263,7 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
                           : "Immersion Ready"}
                       </span>
                     </div>
-                    <span className="text-[11px] bg-white/20 text-slate-900 dark:text-white px-2 py-1 rounded-full font-bold">
+                    <span className="text-[11px] bg-white/80 text-slate-900 dark:text-white px-2 py-1 rounded-full font-bold">
                       {selectedTrack.hours} Hours
                     </span>
                   </div>

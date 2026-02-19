@@ -24,6 +24,7 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
+  ArrowBigRight,
 } from "lucide-react";
 import { verifyCredentials } from "../services/studentVerification";
 import { checkEnrollmentStatus } from "../services/supabase";
@@ -148,7 +149,8 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
                   <IdCard className="w-5 h-5" />
                 </div>
                 <input
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl py-4 pl-12 pr-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                  required
+                  className="placeholder:text-slate-400 w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl py-4 pl-12 pr-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                   value={enrollment.profile.studentNumber}
                   onChange={(e) =>
                     updateProfile({ studentNumber: e.target.value })
@@ -168,8 +170,9 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
                   <Mail className="w-5 h-5" />
                 </div>
                 <input
+                  required
                   type="email"
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl py-4 pl-12 pr-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                  className="placeholder:text-slate-400 w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl py-4 pl-12 pr-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                   value={enrollment.profile.email}
                   onChange={(e) => updateProfile({ email: e.target.value })}
                   placeholder="e.g. sample@feualabang.edu.ph"
@@ -219,7 +222,7 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
                   <User className="w-5 h-5" />
                 </div>
                 <input
-                  className="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl py-4 pl-12 pr-12 text-slate-800 dark:text-slate-400 cursor-not-allowed"
+                  className="w-full placeholder:text-slate-400  bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl py-4 pl-12 pr-12 text-black dark:text-slate-400 cursor-not-allowed"
                   readOnly
                   value={enrollment.profile.fullName}
                   placeholder="Auto-filled upon verification"
@@ -238,7 +241,7 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
                   <Users className="w-5 h-5" />
                 </div>
                 <input
-                  className="w-full bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl py-4 pl-12 pr-12 text-slate-800 dark:text-slate-400 cursor-not-allowed"
+                  className="w-full placeholder:text-slate-400 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl py-4 pl-12 pr-12 text-black dark:text-slate-400 cursor-not-allowed"
                   readOnly
                   value={enrollment.profile.section}
                   placeholder="Auto-filled upon verification"
@@ -291,6 +294,16 @@ const CredentialsPage = ({ enrollment, updateProfile }) => {
         <p className="text-[10px] text-center text-slate-400 mt-4 uppercase tracking-[0.2em] font-medium">
           Academic Year 2025-2026
         </p>
+        {enrollment.profile.studentNumber === "12345" && (
+          <div className="flex justify-end mt-1.5 items-center flex-row">
+            <button
+              className="underline italic text-xs text-slate-400 hover:text-primary"
+              onClick={() => navigate("/admin")}>
+              admin log in
+            </button>
+            <ArrowRight className="w-3 h-3 text-slate-400" />
+          </div>
+        )}
       </footer>
     </>
   );

@@ -149,7 +149,7 @@ const TrackSelectionPage = ({ enrollment, setTrack }) => {
 
       <div className="fixed bottom-0 left-0 right-0 p-6 bg-linear-to-t from-white via-white to-transparent dark:from-slate-900 dark:via-slate-900 z-40 safe-bottom md:static md:bg-none md:border-t md:border-slate-100 md:dark:border-slate-800 md:order-last">
         <button
-          className="w-full md:w-auto md:px-8 bg-primary hover:bg-[#008800] text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+          className="w-full bg-primary hover:bg-[#008800] text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed"
           disabled={!enrollment.selectedTrackId}
           onClick={() => navigate("/step/3")}>
           <span>Next</span>
