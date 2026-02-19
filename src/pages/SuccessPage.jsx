@@ -134,15 +134,22 @@ const SuccessPage = ({ enrollment }) => {
               paddingBottom: "15px",
               marginBottom: "30px",
             }}>
-            <h1
-              style={{
-                fontSize: "28px",
-                fontWeight: "bold",
-                color: "#16a34a",
-                margin: "0 0 5px 0",
-              }}>
-              Enrollment Confirmation
-            </h1>
+            <div className="flex flex-row items-center gap-2">
+              <img
+                style={{ width: "20px", height: "20px" }}
+                src="/vite.svg"
+                alt="Logo"
+              />
+              <h1
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  color: "#16a34a",
+                  margin: "0 0 5px 0",
+                }}>
+                Enrollment Confirmation
+              </h1>
+            </div>
             <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
               Academic Year 2025–2026
             </p>
