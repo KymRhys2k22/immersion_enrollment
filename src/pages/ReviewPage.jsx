@@ -62,7 +62,18 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
   }, []);
 
   const handleSubmit = async () => {
-    if (!isVerified || alreadyEnrolled) return;
+    if (
+      !isVerified ||
+      alreadyEnrolled ||
+      !enrollment.profile.fullName?.trim()
+    ) {
+      if (!enrollment.profile.fullName?.trim()) {
+        alert(
+          "Full Name is missing. Please go back to step 1 to verify your identity.",
+        );
+      }
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -311,7 +322,11 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
           }`}
           onClick={handleSubmit}
           disabled={
-            isSubmitting || !isVerified || alreadyEnrolled || isCheckingStatus
+            isSubmitting ||
+            !isVerified ||
+            alreadyEnrolled ||
+            isCheckingStatus ||
+            !enrollment.profile.fullName?.trim()
           }>
           {isCheckingStatus
             ? "Checking Status..."
