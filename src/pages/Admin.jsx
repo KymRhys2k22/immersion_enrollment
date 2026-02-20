@@ -30,6 +30,9 @@ import {
   Download,
   Trash2,
   Users2,
+  X,
+  Mail,
+  GraduationCap,
 } from "lucide-react";
 
 // Admin credentials from .env
@@ -46,6 +49,7 @@ const Admin = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTrackForModal, setSelectedTrackForModal] = useState(null);
 
   // Handle Login
   const handleLogin = (e) => {
@@ -311,7 +315,8 @@ const Admin = () => {
           {trackStats.map((track) => (
             <div
               key={track.id}
-              className={`min-w-[200px] p-3 rounded-2xl border transition-all hover:shadow-md ${getCapacityColor(track.count)}`}>
+              onClick={() => setSelectedTrackForModal(track)}
+              className={`min-w-[200px] p-3 rounded-2xl border transition-all hover:shadow-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${getCapacityColor(track.count)}`}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <track.icon className="w-4 h-4 opacity-70" />
@@ -492,6 +497,120 @@ const Admin = () => {
           </div>
         </div>
       </main>
+
+      {/* Track Details Modal */}
+      {selectedTrackForModal && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={() => setSelectedTrackForModal(null)}
+          />
+
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 fade-in duration-300">
+            {/* Modal Header */}
+            <header
+              className={`px-6 py-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 shrink-0 ${getCapacityColor(selectedTrackForModal.count)}`}>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/50 dark:bg-black/20 rounded-xl flex items-center justify-center">
+                  <selectedTrackForModal.icon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold truncate max-w-[200px] sm:max-w-md">
+                    {selectedTrackForModal.title}
+                  </h3>
+                  <p className="text-xs font-bold opacity-70">
+                    {selectedTrackForModal.count} Students Enrolled
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedTrackForModal(null)}
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+                <X className="w-6 h-6" />
+              </button>
+            </header>
+
+            {/* Modal Content - Student Cards */}
+            <div className="flex-1 overflow-y-auto p-6 scroll-smooth custom-scrollbar">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {students
+                  .filter(
+                    (s) => s.immersion_program === selectedTrackForModal.id,
+                  )
+                  .map((student) => (
+                    <div
+                      key={student.id}
+                      className="group bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 hover:border-primary/30 hover:shadow-md transition-all relative overflow-hidden">
+                      <div className="flex justify-between items-start relative z-10">
+                        <div className="space-y-3 flex-1">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                              <User className="w-4 h-4 text-primary" />
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
+                                {student.name}
+                              </h4>
+                              <p className="text-[10px] font-mono font-bold text-primary">
+                                {student.student_number}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                              <Mail className="w-3.5 h-3.5 opacity-60" />
+                              <span className="text-[11px] truncate">
+                                {student.email}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                              <GraduationCap className="w-3.5 h-3.5 opacity-60" />
+                              <span className="text-[11px]">
+                                {student.section}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            handleDelete(student.id, student.name);
+                            // If it's the last student in this track, the modal might look empty or close if we want.
+                            // But for now, just keep it open.
+                          }}
+                          className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all shadow-sm"
+                          title="Delete Record">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-[100px] -mr-8 -mt-8 z-0" />
+                    </div>
+                  ))}
+
+                {students.filter(
+                  (s) => s.immersion_program === selectedTrackForModal.id,
+                ).length === 0 && (
+                  <div className="col-span-full py-12 text-center">
+                    <p className="text-slate-400 font-medium italic">
+                      No students currently enrolled in this track.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <footer className="px-6 py-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+              <button
+                onClick={() => setSelectedTrackForModal(null)}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold px-6 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-sm">
+                Close
+              </button>
+            </footer>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
