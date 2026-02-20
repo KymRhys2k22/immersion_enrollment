@@ -12,6 +12,32 @@ import {
 
 export const TRACKS = [
   {
+    id: "pneumatics",
+    title: "PNEUMATICS: Fluid Power",
+    description:
+      "Industrial automation using compressed air and control systems.",
+    icon: Wind,
+    hours: 32,
+  },
+  {
+    id: "data-viz",
+    title: "Business Data Visualization",
+    description: "Transforming complex data into actionable business insights.",
+    icon: BarChart3,
+    hours: 32,
+  },
+  {
+    id: "hydraulics",
+    title: "Hydraulics: Water at Works",
+    description: "Engineering principles of liquid-based mechanical power.",
+    icon: Droplets,
+    hours: 32,
+  },
+  
+]
+
+/* export const TRACKS = [
+  {
     id: "ai",
     title: "Understanding Artificial Intelligence",
     description:
@@ -81,4 +107,4 @@ export const TRACKS = [
     icon: Lightbulb,
     hours: 32,
   },
-];
+]; */
