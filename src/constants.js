@@ -10,7 +10,7 @@ import {
   Lightbulb,
 } from "lucide-react";
 
-export const TRACKS = [
+/* export const TRACKS = [
   {
     id: "pneumatics",
     title: "PNEUMATICS: Fluid Power",
@@ -34,9 +34,9 @@ export const TRACKS = [
     hours: 32,
   },
   
-]
+] */
 
-/* export const TRACKS = [
+export const TRACKS = [
   {
     id: "ai",
     title: "Understanding Artificial Intelligence",
@@ -107,4 +107,4 @@ export const TRACKS = [
     icon: Lightbulb,
     hours: 32,
   },
-]; */
+];

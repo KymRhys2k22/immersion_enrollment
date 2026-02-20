@@ -11,7 +11,11 @@ import { toPng } from "html-to-image";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { TRACKS } from "../constants";
-import { submitEnrollment, checkEnrollmentStatus } from "../services/supabase"; // Service to handle data submission
+import {
+  submitEnrollment,
+  checkEnrollmentStatus,
+  getTrackEnrollmentCounts,
+} from "../services/supabase"; // Service to handle data submission
 import {
   ChevronLeft,
   Edit2,
@@ -77,6 +81,19 @@ const ReviewPage = ({ enrollment, updateProfile }) => {
 
     setIsSubmitting(true);
     try {
+      // Final capacity check before submission
+      const counts = await getTrackEnrollmentCounts();
+      const enrollmentCount = counts[enrollment.selectedTrackId] || 0;
+      const MAX_CAPACITY = 40;
+
+      if (enrollmentCount >= MAX_CAPACITY) {
+        alert(
+          `The ${selectedTrack?.title || "chosen"} track is currently full (Max 40 students). Please select another immersion track.`,
+        );
+        navigate("/step/2");
+        return;
+      }
+
       const result = await submitEnrollment(enrollment);
       console.log("Enrollment submitted successfully:", result);
       navigate("/success");
